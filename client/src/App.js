@@ -3,7 +3,7 @@ import Login from './Login';
 import Logout from './Logout';
 import {useState} from 'react' ;
 import {Outlet,Link} from 'react-router-dom'
-import {Text, Heading, Flex, Link as LinkC, Button, Input, InputGroup, InputLeftElement, IconButton} from '@chakra-ui/react'
+import {Text, Heading, Flex, Link as LinkC, Grid, GridItem, Input, InputGroup, InputLeftElement, IconButton, Image} from '@chakra-ui/react'
 import {SearchIcon} from '@chakra-ui/icons'
 
 function App() {
@@ -26,9 +26,11 @@ function App() {
         justify="space-evenly"
 >
         <Flex justify = "space-around" w="20%" align="center"  >
-        <Text ><Link  to="/" mr={5}><LinkC>Root</LinkC></Link> </Text>
+        <Text><Link  to="/" mr={5}><LinkC>Root</LinkC></Link> </Text>
         <Text>|</Text>
-        <Text> <Link to="/home" ml={5}><LinkC>Home</LinkC></Link></Text>
+        <Text><Link to="/home" ml={5}><LinkC>Home</LinkC></Link></Text>
+        <Text>|</Text>
+        <Text><Link to="/askquestion" ml={5}><LinkC>Ask a question</LinkC></Link></Text>
         </Flex>
 
         <Flex justify="space-around" w="20%" align="center">
@@ -68,13 +70,30 @@ function App() {
               your QnA Forum!
             </Text>
             <br/><br/>
-          </Heading>
+                </Heading>
+            <Grid align="right"
+            templateRows='repeat(2, 1fr)'
+            templateColumns='repeat(15, 1fr)'
+            gap={2}
+            margin='8px'
+            padding={8}
+            shadow='md' borderWidth='2px' flex='1' borderRadius='lg'>
+              <GridItem rowStart="1" colStart="16">
+                <Image align="right" src={pplink} />
+              </GridItem>
+              <GridItem rowStart="2" colStart="16">
+                <Heading as='h4' size='xs'>Name: {name}</Heading>
+                <Heading as='h4' size='xs'>Email: {email}</Heading>
+              </GridItem>
+              <GridItem rowStart="3" colStart="15">
+                <Login childToParent={childToParent}/>
+              </GridItem>
+              <GridItem rowStart="3" colStart="16">
+                <Logout childToParent={childToParent}/>
+              </GridItem>
+            </Grid>
           <Outlet />
-      {/* <h1>Name: {name}</h1>
-      <h2>Email: {email}</h2>
-      <img src={pplink} alt="Profile Photo" />
-      <Login childToParent={childToParent}/>
-      <Logout childToParent={childToParent}/> */}
+      
     </div>
   );
 }

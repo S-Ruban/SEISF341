@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import Home from './pages/Home'
 import Question from './/components/Question'
+import Ask from './Ask'
 import {ChakraProvider} from '@chakra-ui/react'
 
 ReactDOM.render(
@@ -16,6 +17,7 @@ ReactDOM.render(
         <Route path="/" element={<App />} >
           <Route path="/home" element={<Home/>} />
           <Route path="/question/:id" element={<Question />} />
+          <Route path="/askquestion" element={<Ask />}></Route>
         </Route>
       </Routes>     
       </BrowserRouter>
