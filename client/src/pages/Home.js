@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
-import axios from 'axios';
-import { Button, Container, VStack,  StackDivider, color} from "@chakra-ui/react";
+import { Container, VStack } from "@chakra-ui/react";
 import Questionwrapper from '../components/Questionwrapper'
 
 

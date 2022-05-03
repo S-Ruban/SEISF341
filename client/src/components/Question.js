@@ -1,18 +1,26 @@
 import { useLocation, useParams } from "react-router-dom";
-import { Box, Flex, Heading, Text, HStack, Grid, GridItem,Input, InputGroup, InputLeftElement, IconButton} from "@chakra-ui/react"
+import { Box, Heading, Text, Grid, GridItem,Input, InputGroup, IconButton} from "@chakra-ui/react"
+import {Popover, PopoverTrigger, PopoverContent, PopoverBody, PopoverArrow, PopoverCloseButton, toast} from '@chakra-ui/react'
+import {FacebookShareButton, FacebookIcon, WhatsappShareButton, WhatsappIcon} from "react-share";
 import {DeleteIcon, CheckIcon} from '@chakra-ui/icons'
-import {BiUpvote, BiDownvote, BiSend, BiDelete, BiEdit} from "react-icons/bi"
+import {BiUpvote, BiDownvote, BiSend, BiShareAlt, BiClipboard, BiEdit} from "react-icons/bi"
 import {FcCheckmark} from "react-icons/fc"
 import {MdOutlineReportProblem} from "react-icons/md"
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 
 const Question = ({ email }) => {
     const {id} = useParams()
-    const location = useLocation()
     const [question, setQuestion] = useState()
     const [answer, setAnswer] = useState('')
     const [aId,appAnswer] = useState('')
+    
+    function toMins(m) {
+        if(m < 10)
+            return '0'+m.toString();
+        return m.toString();
+    }
 
     useEffect(()=>{
         axios.get(`http://localhost:5000/q/${id}`)
@@ -161,6 +169,38 @@ const Question = ({ email }) => {
                         <IconButton h='8' icon={<BiUpvote/>} colorScheme="green" onClick={up}/>
                         <br/>
                         <IconButton h='8' icon={<BiDownvote/>} colorScheme="red" onClick={down}/>
+                        <Popover>
+                                <PopoverTrigger>
+                                    <IconButton icon={<BiShareAlt/>}>Trigger</IconButton>
+                                </PopoverTrigger>
+                                <PopoverContent>
+                                    <PopoverArrow />
+                                    <PopoverCloseButton />
+                                    <PopoverBody>
+                                        <Link to={`/question/${question._id}`}>{`http://localhost:3000/question/${question._id}`}</Link>
+                                        </PopoverBody>
+                                    <GridItem templateColumns='repeat(3, 1fr)'>
+                                    <IconButton icon={<BiClipboard/>}  onClick={() => {
+                                        navigator.clipboard.writeText(`http://localhost:3000/question/${question._id}`);
+                                        toast({
+                                            title: 'Copied link to clipboard',
+                                            duration: 1000,
+                                            status: 'success',
+                                            isClosable: true,
+                                          })}
+                                        }/>
+                                        <FacebookShareButton 
+                                            url={`http://g-overflow.netlify.app/question/${question._id}`}
+                                            quote={"Check out this post!"}>
+                                            <FacebookIcon size={36} />
+                                        </FacebookShareButton>
+                                        <WhatsappShareButton
+                                            url={`http://g-overflow.netlify.app/question/${question._id}`}>
+                                            <WhatsappIcon size={36}/>
+                                        </WhatsappShareButton>
+                                        </GridItem>
+                                </PopoverContent>
+                                </Popover>
                     </GridItem>
                     <GridItem colStart={2} colEnd={2} h='10' >
                         <Box h='10' w = '40' borderWidth='5px' bg = "papayawhip" borderColor='papayawhip' borderRadius={'sm'}>{question.upvotes} votes</Box>
@@ -172,7 +212,7 @@ const Question = ({ email }) => {
                     <Heading as='h2' size='lg' align='left'>{question.title} </Heading>
                 </GridItem>
                 <GridItem colSpan={1} bg='white' shadow='sm' borderWidth='2px' flex='1' borderRadius='sm'  padding={2}>
-                <Box>Asked,  {new Date(question.createdAt).toLocaleString('default', { month: 'long' })} {new Date(question.createdAt).getDate()}, {new Date(question.createdAt).getFullYear()} at {new Date(question.createdAt).getHours()}:{new Date(question.createdAt).getMinutes()} by {question.postedBy.email}</Box>
+                <Box>Asked,  {new Date(question.createdAt).toLocaleString('default', { month: 'long' })} {new Date(question.createdAt).getDate()}, {new Date(question.createdAt).getFullYear()} at {new Date(question.createdAt).getHours()}:{toMins(new Date(question.createdAt).getMinutes())} by {question.postedBy.fullName} ( <a href={`mailto:${question.postedBy.email}`}>{question.postedBy.email}</a> )</Box>
                 </GridItem>
 
                 {/* Question Body */}
@@ -210,14 +250,48 @@ const Question = ({ email }) => {
                                 </Grid>
                                 <Text align="left">{answer.body}</Text>
                                 
-                                <Grid templateColumns='repeat(2, 1fr)'>
+                                <Grid templateColumns='repeat(3, 1fr)'>
                                     <GridItem colStart={2}><Text align="right" fontSize="3xl">{answer.upvotes}</Text></GridItem>
                                     <GridItem colStart={2} marginLeft="650px"><IconButton w='8' icon={<BiUpvote/>} colorScheme="green" onClick={() => upAns(answer._id)}/></GridItem>
                                     <GridItem colStart={3}><IconButton w='8' icon={<BiDownvote/>} colorScheme="red" onClick={() => downAns(answer._id)}/></GridItem>
+                                    <GridItem colStart={4}>
+                                    <Popover>
+                                <PopoverTrigger>
+                                    <IconButton icon={<BiShareAlt/>}>Trigger</IconButton>
+                                </PopoverTrigger>
+                                <PopoverContent>
+                                    <PopoverArrow />
+                                    <PopoverCloseButton />
+                                    <PopoverBody>
+                                        <Link to={`/question/${question._id}`}>{`http://localhost:3000/question/${answer._id}`}</Link>
+                                        </PopoverBody>
+                                    <GridItem templateColumns='repeat(3, 1fr)'>
+                                    <IconButton icon={<BiClipboard/>}  onClick={() => {
+                                        navigator.clipboard.writeText(`http://localhost:3000/question/${answer._id}`);
+                                        toast({
+                                            title: 'Copied link to clipboard',
+                                            duration: 1000,
+                                            status: 'success',
+                                            isClosable: true,
+                                          })}
+                                        }/>
+                                        <FacebookShareButton 
+                                            url={`http://g-overflow.netlify.app/question/${answer._id}`}
+                                            quote={"What do you think of my answer to this question?"}>
+                                            <FacebookIcon size={36} />
+                                        </FacebookShareButton>
+                                        <WhatsappShareButton
+                                            url={`http://g-overflow.netlify.app/question/${answer._id}`}>
+                                            <WhatsappIcon size={36}/>
+                                        </WhatsappShareButton>
+                                        </GridItem>
+                                </PopoverContent>
+                                </Popover>
+                                </GridItem>
                                 </Grid>
                                 {/* <br/> */}
-                                <Text align="right"> - {answer.postedBy.email} at
-                                {" " + new Date(answer.createdAt).getHours()}:{new Date(answer.createdAt).getMinutes() + " "} 
+                                <Text align="right"> - by {answer.postedBy.fullName} ( <a href={`mailto:${answer.postedBy.email}`}>{answer.postedBy.email}</a> ) at
+                                {" " + new Date(answer.createdAt).getHours()}:{toMins(new Date(answer.createdAt).getMinutes()) + " on "} 
                                 {new Date(answer.createdAt).toLocaleString('default', { month: 'long' }) + " "} 
                                 {new Date(answer.createdAt).getDate() + ", "} 
                                 {new Date(answer.createdAt).getFullYear()}</Text>

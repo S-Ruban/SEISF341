@@ -1,8 +1,7 @@
 import axios from "axios";
-import { Grid, GridItem, Image, Heading, Button } from "@chakra-ui/react";
+import { Grid, GridItem, Image, Heading} from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import Home from "./Home";
-import Questionwrapper from "../components/Questionwrapper";
 
 export default function Profile(){
     

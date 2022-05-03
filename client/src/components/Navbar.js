@@ -42,12 +42,11 @@ export default function Navbar({ setter, search, searcher, login }){
     localStorage.setItem('pplink',res.profileObj.imageUrl);
     localStorage.setItem('name', res.profileObj.name);
     localStorage.setItem('email', res.profileObj.email);
-    console.log('PROFILE_OBJECT: ', res.profileObj);
-    console.log('PROFILE_PICTURE: ',res.profileObj.imageUrl);
-    console.log('NAME: ', res.profileObj.name);
-    console.log('EMAIL: ', res.profileObj.email);
-
-
+    // console.log('PROFILE_OBJECT: ', res.profileObj);
+    // console.log('PROFILE_PICTURE: ',res.profileObj.imageUrl);
+    // console.log('NAME: ', res.profileObj.name);
+    // console.log('EMAIL: ', res.profileObj.email);
+    // window.location.reload();
     refreshTokenSetup(res);
     setShowloginButton(false);
     setShowlogoutButton(true);
@@ -67,6 +66,8 @@ const onSignoutSuccess = () => {
   setShowloginButton(true);
   setShowlogoutButton(false);
   login('');
+  localStorage.clear();
+  window.location.reload();
 };
 
     return(
